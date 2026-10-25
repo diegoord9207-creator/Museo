@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Museo Interactivo EcoLadrillos · De la tierra al aula</title>
+<style>
+:root{--t:#4a2e17;--m:#8a5a2b;--c:#d9a35f;--f:#fbf5ea;--v:#3f7d4e;--g:#e9d9bd;--k:#2b1c0e}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,'Times New Roman',serif;background:var(--f);color:var(--k);line-height:1.65}
+header{background:linear-gradient(135deg,var(--t),var(--m));color:#fff;text-align:center;padding:34px 16px 28px;position:relative}
+header small{letter-spacing:.2em;text-transform:uppercase;color:var(--c);font-size:.75rem}
+header h1{margin:6px 0;font-size:clamp(1.6rem,5vw,2.6rem)}
+header p{margin:0;opacity:.85}
+nav{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:10px;background:#fffbf3e6;backdrop-filter:blur(6px);position:sticky;top:0;z-index:9;border-bottom:1px solid var(--g)}
+nav button{border:1px solid var(--g);background:#fff;color:var(--t);padding:8px 14px;border-radius:22px;cursor:pointer;font:inherit;font-size:.88rem;transition:.2s}
+nav button:hover{background:var(--g)}
+nav button.on{background:var(--m);color:#fff;border-color:var(--m)}
+nav button.vis::after{content:" ✓";color:var(--v)}
+nav button.on.vis::after{color:#fff}
+main{max-width:980px;margin:auto;padding:22px 16px 10px}
+section{display:none;animation:in .5s}
+section.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+h2{color:var(--t);font-size:1.8rem;margin:0 0 4px}
+.sub{color:var(--m);font-style:italic;margin:0 0 18px}
+.hero{position:relative;border-radius:16px;overflow:hidden;margin-bottom:20px;box-shadow:0 8px 24px #0003}
+.hero img{width:100%;height:320px;object-fit:cover;display:block}
+.hero div{position:absolute;inset:auto 0 0;background:linear-gradient(transparent,#000b);color:#fff;padding:40px 20px 16px;font-size:1.05rem}
+.puertas{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:18px 0}
+.puerta{background:#fff;border:2px solid var(--g);border-radius:14px;padding:16px;text-align:center;cursor:pointer;font:inherit;transition:.25s}
+.puerta:hover{transform:translateY(-5px);border-color:var(--c);box-shadow:0 8px 18px #0002}
+.puerta b{display:block;font-size:2rem}
+.puerta span{display:block;color:var(--m);font-size:.85rem}
+.placa{background:var(--t);color:#f5e6c8;border-radius:12px;padding:16px 20px;margin:14px 0;border-left:6px solid var(--c)}
+.placa h3{margin:0 0 4px;color:var(--c);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase}
+.placa p{margin:0}
+.marcos{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin:18px 0}
+.marcos figure{margin:0;background:#fff;padding:10px 10px 6px;border:1px solid var(--g);box-shadow:0 5px 14px #0003;transition:.3s}
+.marcos figure:hover{transform:rotate(-1.2deg) scale(1.03)}
+.marcos img{width:100%;height:170px;object-fit:cover;display:block}
+figcaption{font-size:.78rem;text-align:center;color:#6b5a48;padding-top:5px}
+.reds{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:12px 0 22px}
+.red{background:#fff;border-radius:14px;padding:16px;box-shadow:0 3px 10px #0002;border-top:5px solid var(--v);display:flex;flex-direction:column}
+.red.act{border-top-color:var(--c)}
+.red .tag{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--v);font-weight:bold}
+.red.act .tag{color:#b9731f}
+.red h4{margin:4px 0;color:var(--t)}
+.red p{margin:0 0 12px;font-size:.92rem;flex:1}
+.red a{align-self:flex-start;background:var(--v);color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-size:.9rem}
+.red.act a{background:var(--c);color:var(--t)}
+.go{background:var(--m);color:#fff;border:0;padding:12px 22px;border-radius:10px;font:inherit;cursor:pointer;margin:10px 0}
+.go:hover{background:var(--t)}
+.ficha{background:#fff;border:2px dashed var(--c);border-radius:14px;padding:16px 20px;margin:20px 0}
+.ficha h3{margin:0 0 8px;color:var(--m)}
+.ficha p{margin:4px 0}
+.bar{height:8px;background:var(--g);border-radius:8px;overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;background:var(--v);transition:.4s}
+.card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 3px 10px #0002;margin:12px 0}
+.op{display:block;width:100%;text-align:left;background:#f6ecdc;border:2px solid transparent;border-radius:10px;padding:11px;margin:8px 0;font:inherit;cursor:pointer;transition:.2s}
+.op:hover:not(:disabled){border-color:var(--c)}
+.op.ok{background:#cfe9d4;border-color:var(--v)}
+.op.no{background:#f4cfcf;border-color:#b33}
+.exp{background:#fff7e0;border-radius:10px;padding:10px 14px;margin-top:8px;display:none}
+.emo button{font-size:2.3rem;background:none;border:0;cursor:pointer;margin:0 8px;transition:.2s}
+.emo button:hover{transform:scale(1.3)}
+.insig{font-size:1.4rem;color:var(--t)}
+.nota{font-size:.85rem;color:#6b5a48}
+footer{text-align:center;font-size:.8rem;padding:24px 16px;color:#6b5a48;border-top:1px solid var(--g);margin-top:24px}
+</style>
+</head>
+<body>
+<header><small>Museo interactivo · Recursos educativos digitales</small><h1>EcoLadrillos: de la tierra al aula</h1><p>Un recorrido por 4 herramientas digitales con el proyecto de la IE La Palma</p></header>
+<nav id="nav"></nav>
+<main id="main"></main>
+<footer>Autor: Diego Iván Ordóñez Vargas · Fotografías y recursos propios del proyecto EcoLadrillos Educativos (IE La Palma, Santander) · Licencia CC BY-NC-SA 4.0.</footer>
+
+<script>
+const G="https://diegoord9207-creator.github.io/";
+const R=[
+{n:"Sala 1",t:"Canva",ic:"🎨",s:"Diseño visual para comunicar",
+img:[["tierra","Recolección de tierra para los bloques"],["estiercol","Estiércol, uno de los materiales"],["cemento","Cemento: lo que se busca sustituir"]],
+q:"Canva es una plataforma de diseño en línea para crear pósteres, infografías, presentaciones y videos a partir de plantillas, sin necesidad de saber diseño gráfico.",
+a:"Ayuda a que los estudiantes expresen lo aprendido de forma visual y sintética. Obliga a seleccionar lo esencial, combinar imagen y texto y pensar en el público que lo va a leer. Además permite trabajo colaborativo y publicar con un enlace.",
+e:"El proyecto de ecoladrillos se comunicó con un póster y una infografía: el estudiante resume el proceso (tierra, estiércol, mezcla, bloque) y sus ventajas frente al cemento en una sola pieza visual.",
+red:[["Póster «Ladrillos Ecológicos de Nuestra Tierra»","Póster en Canva que presenta el proyecto de ecoladrillos de la IE La Palma.","https://canva.link/slvb40q2rxnexmd","Diseño · Canva"],["Infografía en Canva","Segundo diseño en Canva del proyecto, con la información organizada visualmente.","https://canva.link/mjigqdp9omrzhxq","Diseño · Canva"]]},
+{n:"Sala 2",t:"Edpuzzle",ic:"🎬",s:"Video con pausas interactivas",
+img:[["mezcla","Mezcla de componentes"],["cascarilla","Ladrillo con cascarilla de arroz"],["sincascarilla","Ladrillo sin cascarilla"]],
+q:"Edpuzzle permite tomar un video, recortarlo y agregarle preguntas, notas de voz y comentarios en puntos exactos. El docente ve quién lo vio y cómo respondió.",
+a:"Convierte el video, que suele ser pasivo, en una experiencia activa: obliga a pensar mientras se mira, da retroalimentación inmediata y deja datos para que el docente evalúe la comprensión de cada estudiante.",
+e:"El vlog «Ecoladrillos Educativos: Recursos y Sostenibilidad» (≈3 min) incluye 2 pausas con preguntas: una de opción múltiple y otra de verdadero/falso, con retroalimentación automática.",
+red:[["Vlog con pausas interactivas","Video del proyecto con dos preguntas intercaladas. ¡Respóndelas mientras lo ves!","https://edpuzzle.com/assignments/6ad6daa2e9df7f54d6aadf6a/watch","Actividad para el visitante · Edpuzzle",1]]},
+{n:"Sala 3",t:"HTML5 interactivo",ic:"🧪",s:"Simulaciones y laboratorios propios",
+img:[["sedimentacion","Prueba de sedimentación real"],["mezcla","Mezcla en la carretilla"]],
+q:"HTML5 con JavaScript permite programar páginas que reaccionan a lo que hace el usuario: simuladores, laboratorios virtuales, juegos y evaluaciones, que funcionan en cualquier navegador.",
+a:"Permite crear recursos a la medida del contexto, sin depender de licencias. El estudiante manipula variables, observa resultados y recibe retroalimentación. Los archivos pesan poco, algo clave en zonas rurales con internet limitado.",
+e:"El Laboratorio Virtual de Mezclas recrea la prueba de sedimentación de la tierra y guía al estudiante por cuatro etapas, sin nota, para observar, comparar y justificar decisiones.",
+red:[["Laboratorio Virtual de Mezclas","Simula la sedimentación de la tierra y guía el diseño de una variante de ecoladrillo.",G+"laboratorio/","Actividad para el visitante · HTML5",1],["Simulador de Decisiones Docentes","Plantea situaciones de aula rural para decidir y analizar las consecuencias.",G+"Simulador-de-Decisiones-/","Simulación · HTML5"],["EcoLadrillos con Design Thinking","Recorrido por las fases del diseño aplicado al proyecto de ecoladrillos.",G+"ecoladrillos-design-thinking1/","Recorrido interactivo · HTML5"]]},
+{n:"Sala 4",t:"GitHub Pages",ic:"🌐",s:"Publicar y compartir recursos",
+img:[["colegio","Institución Educativa La Palma"],["escudo","«Nuestro campo es la escuela»"]],
+q:"GitHub Pages es un servicio gratuito que publica páginas web directamente desde un repositorio, con un enlace público y sin pagar hosting.",
+a:"Le da a cualquier docente un espacio propio donde alojar y compartir recursos, y deja organizarlos en un repositorio reutilizable. Con licencias abiertas (Creative Commons) otros colegas pueden adaptarlos, lo que multiplica su alcance.",
+e:"El Repositorio EcoAula reúne los recursos del proyecto en un catálogo con filtros por área, nivel y tipo, pensado para la red de instituciones rurales de Santander. Este museo también está publicado así.",
+red:[["Repositorio EcoAula","Prototipo de repositorio de recursos digitales para la educación rural de Santander.",G+"Repositorio/","Repositorio · GitHub Pages"],["Póster Interactivo","Versión interactiva del póster del proyecto, publicada en la web.",G+"Poster/","Póster interactivo · GitHub Pages"]]}
+];
+const nav=document.getElementById("nav"),main=document.getElementById("main"),vis=new Set();
+const names=["Inicio",...R.map(r=>r.t),"Reto final"];
+function el(h){return h}
+let H='<section id="s0" class="on"><div class="hero"><img src="img/portada.jpg" alt="Ecoladrillos del proyecto"><div>Bienvenido: aquí cada sala presenta una herramienta digital y los recursos que se hicieron con ella.</div></div><h2>Un museo con 4 salas</h2><p class="sub">Del bloque de tierra a la pantalla</p><p>En la IE La Palma (Gámbita, Santander) los estudiantes fabricaron ecoladrillos con tierra de la región y otros materiales locales, como alternativa al cemento, que allá es difícil de conseguir. Este museo cuenta ese proyecto a través de las herramientas digitales que lo hicieron posible.</p><div class="puertas">'+R.map((r,i)=>'<button class="puerta" onclick="ir('+(i+1)+')"><b>'+r.ic+'</b>'+r.n+'<span>'+r.t+'</span></button>').join("")+'</div><div class="ficha"><h3>Ficha del museo</h3><p><b>Tema:</b> Ecoladrillos y sostenibilidad en el aula rural.</p><p><b>Objetivo didáctico:</b> Reconocer cómo Canva, Edpuzzle, HTML5 y GitHub Pages apoyan el aprendizaje de la sostenibilidad a partir de un proyecto real.</p><p><b>Dirigido a:</b> estudiantes de postprimaria y docentes de contextos rurales.</p></div><button class="go" onclick="ir(1)">Entrar a la Sala 1 →</button></section>';
+R.forEach((r,i)=>{H+='<section id="s'+(i+1)+'"><h2>'+r.ic+' '+r.n+' · '+r.t+'</h2><p class="sub">'+r.s+'</p><div class="marcos">'+r.img.map(m=>'<figure><img src="img/'+m[0]+'.jpg" alt="'+m[1]+'"><figcaption>'+m[1]+'</figcaption></figure>').join("")+'</div><div class="placa"><h3>La herramienta</h3><p>'+r.q+'</p></div><div class="placa"><h3>Aporte a la educación</h3><p>'+r.a+'</p></div><div class="placa"><h3>Ejemplo con ecoladrillos</h3><p>'+r.e+'</p></div><h3>Recursos educativos digitales de esta sala</h3><div class="reds">'+r.red.map(d=>'<div class="red'+(d[4]?' act':'')+'"><span class="tag">'+d[3]+'</span><h4>'+d[0]+'</h4><p>'+d[1]+'</p><a href="'+d[2]+'" target="_blank" rel="noopener">Abrir recurso ↗</a></div>').join("")+'</div><button class="go" onclick="ir('+(i+2)+')">'+(i<3?'Siguiente sala →':'Ir al reto final →')+'</button></section>'});
+H+='<section id="s5"><h2>🏆 Reto final</h2><p class="sub">5 preguntas y una votación rápida</p><div class="bar"><i id="pb" style="width:0"></i></div><div id="quiz"></div><div id="fin" style="display:none"><div class="card"><div class="insig" id="res"></div><p>¿Cómo fue tu experiencia en el museo?</p><div class="emo"><button onclick="voto(\'😍\')">😍</button><button onclick="voto(\'🙂\')">🙂</button><button onclick="voto(\'😐\')">😐</button><button onclick="voto(\'😕\')">😕</button></div><p id="vt" class="nota"></p></div></div></section>';
+main.innerHTML=H;
+names.forEach((n,i)=>{const b=document.createElement("button");b.textContent=n;b.onclick=()=>ir(i);nav.appendChild(b)});
+function ir(i){document.querySelectorAll("main>section").forEach((s,k)=>s.classList.toggle("on",k==i));
+if(i>0&&i<5)vis.add(i);nav.querySelectorAll("button").forEach((b,k)=>{b.classList.toggle("on",k==i);b.classList.toggle("vis",vis.has(k))});scrollTo(0,0)}
+ir(0);
+const Q=[
+["¿Qué material industrial se busca reemplazar con los ecoladrillos?",["Cemento","Vidrio","Madera"],0,"El proyecto busca una alternativa al cemento, difícil de conseguir en la zona rural."],
+["¿Qué material orgánico se mezcla con la tierra en el proyecto?",["Arena de río","Estiércol","Yeso"],1,"El estiércol es uno de los materiales locales de la mezcla."],
+["¿Para qué se tamiza la tierra antes de mezclar?",["Para darle color","Para quitar piedras y terrones grandes y tener una mezcla uniforme","Para que no necesite agua"],1,"Tamizar deja una tierra más uniforme."],
+["¿Qué herramienta permite agregar preguntas dentro de un video?",["Canva","Edpuzzle","GitHub Pages"],1,"Edpuzzle inserta preguntas en puntos exactos del video."],
+["¿Qué servicio gratuito publica páginas HTML como este museo?",["GitHub Pages","Edpuzzle","Canva"],0,"GitHub Pages aloja sitios estáticos desde un repositorio."]];
+let q=0,pts=0;
+function pinta(){const d=document.getElementById("quiz");document.getElementById("pb").style.width=(q/Q.length*100)+"%";
+if(q>=Q.length){d.style.display="none";document.getElementById("fin").style.display="block";
+document.getElementById("res").textContent=(pts>=4&&vis.size==4?"🏅 Insignia de oro: Museólogo/a completo. ":pts>=4?"🥈 Insignia de plata: Constructor/a sostenible. ":"🧱 Insignia de bronce: Aprendiz de ecoladrillos. ")+pts+" de "+Q.length+" correctas, "+vis.size+" de 4 salas visitadas.";return}
+const x=Q[q];d.innerHTML='<div class="card"><b>Pregunta '+(q+1)+' de 5</b><p>'+x[0]+'</p></div>';
+x[1].forEach((t,i)=>{const b=document.createElement("button");b.className="op";b.textContent=t;
+b.onclick=()=>{d.querySelectorAll(".op").forEach((e,k)=>{e.disabled=true;if(k==x[2])e.classList.add("ok")});
+if(i==x[2])pts++;else b.classList.add("no");const p=document.createElement("div");p.className="exp";p.style.display="block";p.innerHTML=(i==x[2]?"✅ ¡Correcto! ":"❌ No es esa. ")+x[3]+'<br><button class="go" onclick="q++;pinta()">Continuar →</button>';d.appendChild(p)};d.appendChild(b)})}
+pinta();
+function voto(e){document.getElementById("vt").textContent="¡Gracias por tu voto "+e+"! Tu opinión nos ayuda a mejorar el museo."}
+</script>
+</body>
+</html>
